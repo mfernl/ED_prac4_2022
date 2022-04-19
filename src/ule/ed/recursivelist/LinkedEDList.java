@@ -34,8 +34,7 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public boolean isEmpty() {
-		// TODO 
-		return false;
+		return front == null;
 	}
 
 
