@@ -96,6 +96,12 @@ public class LinkedEDList<T> implements EDList<T> {
 			aux = front;
 			front = a;
 			a.next = aux;
+		}else if(front.next.next == null){
+			Node<T> a = new Node<T>(elem);
+			Node<T> aux;
+			aux = front;
+			front = a;
+			a.next = aux;
 		}else {
 			addAntePenRec(front,elem);
 		}
@@ -104,15 +110,14 @@ public class LinkedEDList<T> implements EDList<T> {
 	
 	public void addAntePenRec(Node<T> aux, T elem) {
 		Node<T> sig;
-		if(aux!=null) {
-			if(aux.next!=null) {
-				if(aux.next.next!=null) {
-					Node<T> a = new Node<T>(elem);
-					Node<T> e;
-					sig = aux.next;
-					
-				}
-			}
+		if(aux.next.next.next!=null) {
+			sig = aux.next;
+			addAntePenRec(sig,elem);
+		}else {
+			sig = aux.next;
+			Node<T> e = new Node<T>(elem);
+			aux.next = e;
+			e.next = sig;
 		}
 	}
 
