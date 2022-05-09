@@ -26,10 +26,22 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public int size() {
-		// TODO RECURSIVAMENTE
-		return 0;
+		int tamaño = sizeRec(this.front);
+		return tamaño;
 	}
 
+	
+	public int sizeRec(Node<T> aux) {
+		int result;
+		if(aux == null) {
+			 result = 0;
+		}else if(aux.next == null) {
+			result = 1;
+		}else {
+			result = 1 + sizeRec(aux.next); 		
+		}
+		return result;
+	}
 
 
 	@Override
@@ -41,10 +53,29 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public void addLast(T elem) {
-		// TODO RECURSIVAMENTE
-		
+		if(elem == null) {
+			throw new NullPointerException();
+		}else if(isEmpty()) {
+			Node<T> aux = new Node<T>(elem);
+			front = aux;
+		}else {
+			addLastRec(front,elem);
+		}
 	}
 
+	public void addLastRec(Node<T> aux,T elem) {
+		Node<T> sig;
+		if(aux != null) {
+			if(aux.next != null) {
+				sig = aux.next;
+				addLastRec(sig,elem);
+			}else {
+				Node<T> last = new Node<T>(elem);
+				aux.next = last;
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		// TODO RECURSIVAMENTE
@@ -54,10 +85,36 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public void addAntePenult(T elem) {
-		// TODO RECURSIVAMENTE
-		
+		if(elem == null) {
+			throw new NullPointerException();
+		}else if(isEmpty()) {
+			Node<T> aux = new Node<T>(elem);
+			front = aux;
+		}else if(front.next == null){
+			Node<T> a = new Node<T>(elem);
+			Node<T> aux;
+			aux = front;
+			front = a;
+			a.next = aux;
+		}else {
+			addAntePenRec(front,elem);
+		}
 	}
 
+	
+	public void addAntePenRec(Node<T> aux, T elem) {
+		Node<T> sig;
+		if(aux!=null) {
+			if(aux.next!=null) {
+				if(aux.next.next!=null) {
+					Node<T> a = new Node<T>(elem);
+					Node<T> e;
+					sig = aux.next;
+					
+				}
+			}
+		}
+	}
 
 
 	@Override
