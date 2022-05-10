@@ -19,6 +19,22 @@ public class LinkedEDListTest {
 	}
 	
 	@Test
+	public void testSize() {
+		lista.addLast("2");
+		assertEquals(1,lista.size());
+	}
+	
+	@Test
+	public void testAddPos() {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		assertEquals(3,lista.size());
+		assertEquals("A",lista.getElemPos(2));
+		assertEquals("B",lista.getElemPos(3));
+	}
+	
+	@Test
 	public void test_AddLast() {
 		lista.addLast("2");
 		Assert.assertFalse(lista.isEmpty());

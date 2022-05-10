@@ -124,26 +124,91 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public void addPos(T elem, int position) {
-		// TODO RECURSIVAMENTE
-		
+		if(elem == null) {
+			throw new NullPointerException();
+		}else if(position <= 0){
+			throw new IllegalArgumentException();
+		}else if(position>=size()) {
+			addLast(elem);
+		}else if(isEmpty()) {
+			addLast(elem);
+		}else if(position == 1) {
+			Node<T> nuevo = new Node<T>(elem);
+			Node<T> aux = front;
+			front = nuevo;
+			nuevo.next = aux;
+		}else if(position>=size()) {
+			addLast(elem);
+		}else{
+			addPosRec(this.front,elem,position);
+		}
+	}
+	
+	
+	public void addPosRec(Node<T> aux, T elem ,int position) {
+		int vuelta = position;
+		if(aux != null) {
+			Node<T> prev = aux;
+			if(aux.next != null) {
+				Node<T> current = aux.next;
+				if(vuelta == 2) {
+					Node<T> nuevo = new Node<T>(elem);
+					prev.next = nuevo;
+					nuevo.next = current;
+				}else {
+					addPosRec(current,elem,vuelta--);
+				}
+			}
+		}
 	}
 
 
 	@Override
 	public T getElemPos(int position) {
-		// TODO RECURSIVAMENTE
-		return null;
+		if(1>position && position>size()) {
+			throw new IllegalArgumentException();
+		}else{	
+			return getElemPosRec(this.front,position);
+		}
 	}
 
+	public T getElemPosRec(Node<T> aux,int position) {
+		Node <T> result;
+		if(aux!=null) {
+			if(position == 1) {
+				result = aux;
+				return result.elem;
+			}else {
+				 return getElemPosRec(aux.next,--position);
+			}
+		}else {
+		return null;
+		}
+	}
 
 
 	@Override
 	public int getPosFirst(T elem) {
-		// TODO RECURSIVAMENTE
-		return 0;
+		if(elem == null) {
+			throw new NullPointerException();
+		}else {
+			return getPosFirstRec(this.front,elem);
+		}
 	}
 
-
+	public int getPosFirstRec(Node<T> aux, T elem) {
+		int pos;
+		if(aux!=null) {
+			if(aux.elem.equals(elem)) {
+				pos = 1;
+			}else {
+				pos = 1 + getPosFirstRec(aux.next,elem);
+			}
+		}else {
+			pos = 0;
+		}
+		return pos;
+	}
 
 	@Override
 	public int getPosLast(T elem) {
