@@ -2,6 +2,7 @@ package ule.ed.recursivelist;
 
 import static org.junit.Assert.*;
 
+import java.util.NoSuchElementException;
 import org.junit.*;
 
 
@@ -25,6 +26,16 @@ public class LinkedEDListTest {
 	}
 	
 	@Test
+	public void testGetPosFirst() {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		assertEquals(3,lista.getPosFirst("B"));
+		assertEquals(2,lista.getPosFirst("A"));
+		assertEquals(1,lista.getPosFirst("2"));
+	}
+	
+	@Test
 	public void testAddPos() {
 		lista.addLast("2");
 		lista.addPos("A",2);
@@ -32,6 +43,11 @@ public class LinkedEDListTest {
 		assertEquals(3,lista.size());
 		assertEquals("A",lista.getElemPos(2));
 		assertEquals("B",lista.getElemPos(3));
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testGetPosFirstNoElem() {
+			lista.getPosFirst("C");
 	}
 	
 	@Test

@@ -206,6 +206,7 @@ public class LinkedEDList<T> implements EDList<T> {
 			}
 		}else {
 			pos = 0;
+			throw new NoSuchElementException();
 		}
 		return pos;
 	}
