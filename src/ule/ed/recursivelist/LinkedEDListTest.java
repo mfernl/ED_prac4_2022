@@ -45,6 +45,39 @@ public class LinkedEDListTest {
 		assertEquals("B",lista.getElemPos(3));
 	}
 	
+	@Test
+	public void testAllRemove() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("A");
+		assertEquals(4,lista.size());
+		assertEquals("A",lista.removeFirstElem("A"));
+		assertEquals(3,lista.size());
+		assertEquals("B",lista.removePenult());
+		assertEquals(2,lista.size());
+		assertEquals("A",lista.removelast());
+		assertEquals(1,lista.size());
+	}
+	
+	@Test
+	public void testRemoveFirst() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		assertEquals("A",lista.removeFirstElem("A"));
+		assertEquals(1,lista.size());
+	}
+	
+	@Test
+	public void testGetElemPos() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("A");
+		assertEquals("B",lista.getElemPos(3));
+		assertEquals(2,lista.getPosFirst("A"));		
+	}
+	
 	@Test(expected=NoSuchElementException.class)
 	public void testGetPosFirstNoElem() {
 			lista.getPosFirst("C");

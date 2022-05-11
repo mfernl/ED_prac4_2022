@@ -78,9 +78,20 @@ public class LinkedEDList<T> implements EDList<T> {
 	
 	@Override
 	public String toString() {
-		// TODO RECURSIVAMENTE
+		StringBuffer salida = new StringBuffer();
+		StringBuffer texto = new StringBuffer();
+			salida.append("(");
+			salida.append(toStringRec(this.front,texto));
+			salida.append(")");
+		return salida.toString();
+	}
 	
-		return null;
+	public String toStringRec(Node<T> aux, StringBuffer salida) {
+		if(aux!=null) {
+			salida.append(aux.elem + " ");
+			toStringRec(aux.next,salida);
+		}
+		return salida.toString();
 	}
 
 	@Override
@@ -213,32 +224,127 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public int getPosLast(T elem) {
-		// TODO RECURSIVAMENTE
-		return 0;
+		if(elem == null) {
+			throw new NullPointerException();
+		}else {
+			return getPosLastRec(this.front,elem);
+		}
 	}
 
+	public int getPosLastRec(Node<T> aux, T elem) {
+		int pos;
+		if(aux!=null) {
+			if(aux.elem.equals(elem)) {
+				pos = 1;
 
+			}else {
+				pos = 1 + getPosLastRec(aux.next,elem);
+			}
+		}else {
+			pos = 0;
+			throw new NoSuchElementException();
+		}
+		return pos;
+	}
 
 	@Override
 	public T removelast() throws EmptyCollectionException {
-		// TODO RECURSIVAMENTE
-		return null;
+		T result;
+		if (!isEmpty()){
+			if (front.next == null){
+				result=front.elem;
+				front=null;
+				return result;
+			}else if(front.next.next == null) {
+				result = front.next.elem;
+				front.next = null;
+				return result;
+			}
+			else return removeLastRec(front);
+		}
+		else { 
+		throw new EmptyCollectionException("");
+		}
+
+	}
+	
+	public T removeLastRec(Node<T> aux) {
+		T result;
+		if(aux!=null) {
+			if(aux.next.next == null) {
+				result = aux.next.elem;
+				aux.next = null;
+				return result;
+			}else {
+				return removeLastRec(aux.next);
+			}
+		}
+		else return null;
 	}
 
 
 
 	@Override
 	public T removePenult() throws EmptyCollectionException {
-		// TODO RECURSIVAMENTE
-		return null;
+		T result;
+		if (!isEmpty()){
+			if (front.next == null){
+				throw new NoSuchElementException();
+			}else if(front.next.next == null) {
+				Node<T>aux = front;
+				result = front.elem;
+				front = aux.next;
+				return result;
+			}
+			else return removePenultRec(front);
+		}
+		else { 
+		throw new EmptyCollectionException("");
+		}
+
+	}
+	
+	public T removePenultRec(Node<T> aux) {
+		T result;
+		if(aux!=null) {
+			if(aux.next.next.next == null) {
+				result = aux.next.elem;
+				aux.next = aux.next.next;
+				return result;
+			}else {
+				return removeLastRec(aux.next);
+			}
+		}
+		else return null;
 	}
 
 
-
-	@Override
 	public T removeFirstElem(T elem) throws EmptyCollectionException {
-		// TODO RECURSIVAMENTE
-		return null;
+		if(isEmpty()) {
+			throw new EmptyCollectionException("");
+		}else if(front.elem.equals(elem)){
+			T result;
+			result = front.elem;
+			front = front.next;
+			return result;
+		}else {	
+			return removeFirstElemRec(this.front,elem);
+		}
+	}
+
+	public T removeFirstElemRec(Node<T> aux, T elem) {
+		T result;
+		if(aux!=null) {
+			if(aux.next.elem.equals(elem)) {
+				result = aux.next.elem;
+				aux.next = aux.next.next;
+			}else {
+				 result = removeFirstElemRec(aux.next,elem);
+			}
+		}else {
+			throw new NoSuchElementException();
+		}
+		return result;
 	}
 
 
