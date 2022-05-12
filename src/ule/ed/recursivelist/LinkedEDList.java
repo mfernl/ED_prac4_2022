@@ -227,24 +227,28 @@ public class LinkedEDList<T> implements EDList<T> {
 		if(elem == null) {
 			throw new NullPointerException();
 		}else {
-			return getPosLastRec(this.front,elem);
+			int tamaño = size();
+			Node<T> aux = front;
+			for(int i = 1; i<tamaño; i++) {
+				aux = aux.next;
+			}
+			return getPosLastRec(aux,elem,tamaño,this.front);
 		}
 	}
 
-	public int getPosLastRec(Node<T> aux, T elem) {
-		int pos;
+	public int getPosLastRec(Node<T> aux, T elem, int c,Node<T> first) {
 		if(aux!=null) {
 			if(aux.elem.equals(elem)) {
-				pos = 1;
-
+				return c;
 			}else {
-				pos = 1 + getPosLastRec(aux.next,elem);
+				aux = first;
+				for(int i = 1; i<c-1;i++) {
+					aux = aux.next;
+				}
+				return getPosLastRec(aux,elem,--c,first);
 			}
-		}else {
-			pos = 0;
-			throw new NoSuchElementException();
 		}
-		return pos;
+		return c;
 	}
 
 	@Override
@@ -351,34 +355,149 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public T removeLastElem(T elem) throws EmptyCollectionException {
-		// TODO RECURSIVAMENTE
-		return null;
+		if(isEmpty()) {
+			throw new EmptyCollectionException("");
+		}else {	
+			int tamaño = size() - 1;
+			Node<T> aux = front;
+			for(int i=1; i<tamaño ;i++) {
+				aux = aux.next;
+			}
+			return removeLastElemRec(this.front,elem,tamaño,aux);
+		}
+	}
+
+	public T removeLastElemRec(Node<T> first, T elem, int c,Node<T> aux) throws EmptyCollectionException {
+		T result;
+		if(aux!=null) {
+			if(aux!= first) {
+				if(aux.next.elem.equals(elem)) {
+					result = aux.next.elem;
+					aux.next = aux.next.next;
+				}else {
+					aux = first;
+					for(int i=1; i<c-1; i++) {
+						aux = aux.next;
+					}
+					result = removeLastElemRec(first,elem,--c,aux);
+				}
+			}else {
+				result = front.elem;
+				front = front.next;
+			}
+		}else {
+			throw new NoSuchElementException();
+		}
+		return result;
 	}
 
 
 
 	@Override
 	public EDList<T> reverse() {
-		// TODO RECURSIVAMENTE
-		return null;
+		LinkedEDList<T> inverso = new LinkedEDList<T>();
+		if(size() == 1) {
+			inverso.front = front;
+			return inverso;
+		}else if(size()==2) {
+			inverso.front = front.next;
+			inverso.front.next = front;
+			return inverso;
+		}else {
+			int tamaño = size();
+			Node<T> aux = front;
+			for(int i=1;i<tamaño;i++) {
+				aux = aux.next;
+			}
+			inverso.addLast(aux.elem);
+			return reverseRec(inverso,tamaño-1);
+		}
 	}
 
-
+	public EDList<T> reverseRec(LinkedEDList<T> inver, int c){
+		Node<T> aux = front;
+		if(c>1) {	
+			for(int i=1;i<c;i++) {
+				aux = aux.next;
+			}
+			inver.addLast(aux.elem);
+			reverseRec(inver,c-1);
+		}else {
+			inver.addLast(aux.elem);
+		}
+		return inver;
+	}
 
 	@Override
 	public String toStringFromUntilReverse(int from, int until) {
-		// TODO RECURSIVAMENTE
-		return null;
+		int tamaño;
+		LinkedEDList<T> inverso = new LinkedEDList<T>();
+		if(from <= 0 && until <= 0 && until > from) {
+			throw new IllegalArgumentException();
+		}
+		if(from > size()) {
+			tamaño = size();
+			Node<T> aux = front;
+			for(int i=1;i<tamaño;i++) {
+				aux = aux.next;
+			}
+			inverso.addLast(aux.elem);
+			return toStringFromUntilReverseRec(inverso, tamaño-1, until).toString();
+		}else {
+			tamaño = from;
+			Node<T> aux = front;
+			for(int i=1;i<tamaño;i++) {
+				aux = aux.next;
+			}
+			inverso.addLast(aux.elem);
+			return toStringFromUntilReverseRec(inverso, tamaño-1, until).toString();
+		}
 	}
 
-
+	public EDList<T> toStringFromUntilReverseRec(LinkedEDList<T> inver, int c, int until){
+		Node<T> aux = front;
+		if(c>until) {
+			for(int i=1;i<c;i++) {
+				aux = aux.next;
+			}
+			inver.addLast(aux.elem);
+			toStringFromUntilReverseRec(inver,c-1,until);
+		}else {
+			for(int i=1;i<c;i++) {
+				aux = aux.next;
+			}
+			inver.addLast(aux.elem);
+		}
+		return inver;
+	}
 
 	@Override
 	public String toStringEvenOdd() {
-		// TODO RECURSIVAMENTE
-		return null;
+		LinkedEDList<T> aux = new LinkedEDList<T>();
+		LinkedEDList<T> resul = new LinkedEDList<T>();
+		int even = 1;
+		Node<T> nodo = front;
+		return toStringEvenOddRec(resul,even,aux,nodo).toString();
 	}
 	
+	public EDList<T> toStringEvenOddRec(LinkedEDList<T> resul, int c,LinkedEDList<T> aux,Node<T> nodo){
+		if(nodo!=null) {
+			if(c%2==0) {
+				resul.addLast(nodo.elem);
+			}else {
+				aux.addLast(nodo.elem);
+			}
+			toStringEvenOddRec(resul,++c,aux,nodo.next);
+		}else {
+			Node<T> rnod;
+			int tamaño = aux.size();
+			for(int i=tamaño; i>0;i--) {
+				rnod = new Node<T>(aux.getElemPos(i));
+				resul.addLast(rnod.elem);
+			}
+		}
+		return resul;
+	}
 	
 	
 	

@@ -36,6 +36,19 @@ public class LinkedEDListTest {
 	}
 	
 	@Test
+	public void testGetPosLast() {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("A");
+		lista.addLast("B");
+		lista.addLast("2");
+		assertEquals(5,lista.getPosLast("B"));
+		assertEquals(4,lista.getPosLast("A"));
+		assertEquals(6,lista.getPosLast("2"));
+	}
+	
+	@Test
 	public void testAddPos() {
 		lista.addLast("2");
 		lista.addPos("A",2);
@@ -64,8 +77,27 @@ public class LinkedEDListTest {
 	public void testRemoveFirst() throws EmptyCollectionException {
 		lista.addLast("2");
 		lista.addPos("A",2);
+		assertEquals("(2 A )",lista.toString());
 		assertEquals("A",lista.removeFirstElem("A"));
+		assertEquals("(2 )",lista.toString());
 		assertEquals(1,lista.size());
+	}
+	
+	@Test
+	public void testRemovelast() throws EmptyCollectionException {
+		lista.addLast("B");
+		lista.addPos("A",2);
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		assertEquals("(B A 2 2 2 )",lista.toString());
+		assertEquals(5,lista.size());
+		assertEquals("2",lista.removeLastElem("2"));
+		assertEquals("(B A 2 2 )",lista.toString());
+		assertEquals(4,lista.size());
+		assertEquals("B",lista.removeLastElem("B"));
+		assertEquals("(A 2 2 )",lista.toString());
+		assertEquals(3,lista.size());
 	}
 	
 	@Test
@@ -76,6 +108,40 @@ public class LinkedEDListTest {
 		lista.addLast("A");
 		assertEquals("B",lista.getElemPos(3));
 		assertEquals(2,lista.getPosFirst("A"));		
+	}
+	
+	@Test
+	public void testReverse() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("2");
+		lista.addLast("E");
+		lista.addLast("G");
+		assertEquals("(G E 2 B A 2 )",lista.reverse().toString());
+	}
+	
+	@Test
+	public void testFromUntilReverse() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("2");
+		lista.addLast("C");
+		lista.addLast("2");
+		lista.addLast("2");
+		assertEquals("(C 2 B A )",lista.toStringFromUntilReverse(5,2));
+	}
+	
+	@Test
+	public void testEvenOdd() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addPos("B",3);
+		lista.addLast("2");
+		lista.addLast("E");
+		lista.addLast("G");
+		assertEquals("(A 2 G E B 2 )",lista.toStringEvenOdd());
 	}
 	
 	@Test(expected=NoSuchElementException.class)
