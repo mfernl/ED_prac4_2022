@@ -81,7 +81,11 @@ public class LinkedEDList<T> implements EDList<T> {
 		StringBuffer salida = new StringBuffer();
 		StringBuffer texto = new StringBuffer();
 			salida.append("(");
+			if(isEmpty()) {
+				salida.append("");
+			}else {
 			salida.append(toStringRec(this.front,texto));
+			}
 			salida.append(")");
 		return salida.toString();
 	}
@@ -139,7 +143,7 @@ public class LinkedEDList<T> implements EDList<T> {
 			throw new NullPointerException();
 		}else if(position <= 0){
 			throw new IllegalArgumentException();
-		}else if(position>=size()) {
+		}else if(position>size()) {
 			addLast(elem);
 		}else if(isEmpty()) {
 			addLast(elem);
@@ -148,8 +152,6 @@ public class LinkedEDList<T> implements EDList<T> {
 			Node<T> aux = front;
 			front = nuevo;
 			nuevo.next = aux;
-		}else if(position>=size()) {
-			addLast(elem);
 		}else{
 			addPosRec(this.front,elem,position);
 		}
@@ -167,7 +169,7 @@ public class LinkedEDList<T> implements EDList<T> {
 					prev.next = nuevo;
 					nuevo.next = current;
 				}else {
-					addPosRec(current,elem,vuelta--);
+					addPosRec(current,elem,--vuelta);
 				}
 			}
 		}
@@ -176,7 +178,7 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public T getElemPos(int position) {
-		if(1>position && position>size()) {
+		if(1>position || position>size()) {
 			throw new IllegalArgumentException();
 		}else{	
 			return getElemPosRec(this.front,position);
@@ -238,15 +240,23 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	public int getPosLastRec(Node<T> aux, T elem, int c,Node<T> first) {
 		if(aux!=null) {
-			if(aux.elem.equals(elem)) {
-				return c;
-			}else {
-				aux = first;
-				for(int i = 1; i<c-1;i++) {
-					aux = aux.next;
+			if(c>1) {
+				if(aux.elem.equals(elem)) {
+					return c;
+				}else {
+					aux = first;
+					for(int i = 1; i<c-1;i++) {
+						aux = aux.next;
+					}
+					return getPosLastRec(aux,elem,--c,first);
 				}
-				return getPosLastRec(aux,elem,--c,first);
-			}
+			}else {
+				if(aux.elem.equals(elem)) {
+					return c;
+				}else {
+					throw new NoSuchElementException();
+				}
+			} 
 		}
 		return c;
 	}
@@ -316,7 +326,7 @@ public class LinkedEDList<T> implements EDList<T> {
 				aux.next = aux.next.next;
 				return result;
 			}else {
-				return removeLastRec(aux.next);
+				return removePenultRec(aux.next);
 			}
 		}
 		else return null;
@@ -324,6 +334,9 @@ public class LinkedEDList<T> implements EDList<T> {
 
 
 	public T removeFirstElem(T elem) throws EmptyCollectionException {
+		if(elem == null) {
+			throw new NullPointerException();
+		}
 		if(isEmpty()) {
 			throw new EmptyCollectionException("");
 		}else if(front.elem.equals(elem)){
@@ -339,11 +352,19 @@ public class LinkedEDList<T> implements EDList<T> {
 	public T removeFirstElemRec(Node<T> aux, T elem) {
 		T result;
 		if(aux!=null) {
-			if(aux.next.elem.equals(elem)) {
-				result = aux.next.elem;
-				aux.next = aux.next.next;
+			if(aux.next!=null) {
+				if(aux.next.elem.equals(elem)) {
+					result = aux.next.elem;
+					aux.next = aux.next.next;
+				}else {
+					result = removeFirstElemRec(aux.next,elem);
+				}
 			}else {
-				 result = removeFirstElemRec(aux.next,elem);
+				if(aux.elem.equals(elem)) {
+					result = aux.elem;
+				}else {
+					throw new NoSuchElementException();
+				}
 			}
 		}else {
 			throw new NoSuchElementException();
@@ -355,6 +376,9 @@ public class LinkedEDList<T> implements EDList<T> {
 
 	@Override
 	public T removeLastElem(T elem) throws EmptyCollectionException {
+		if(elem == null) {
+			throw new NullPointerException();
+		}
 		if(isEmpty()) {
 			throw new EmptyCollectionException("");
 		}else {	
@@ -382,8 +406,12 @@ public class LinkedEDList<T> implements EDList<T> {
 					result = removeLastElemRec(first,elem,--c,aux);
 				}
 			}else {
+				if(aux.elem.equals(elem)) {
 				result = front.elem;
 				front = front.next;
+				}else {
+					throw new NoSuchElementException();
+				}
 			}
 		}else {
 			throw new NoSuchElementException();
@@ -396,6 +424,9 @@ public class LinkedEDList<T> implements EDList<T> {
 	@Override
 	public EDList<T> reverse() {
 		LinkedEDList<T> inverso = new LinkedEDList<T>();
+		if(isEmpty()) {
+			return inverso;
+		}
 		if(size() == 1) {
 			inverso.front = front;
 			return inverso;
@@ -432,8 +463,11 @@ public class LinkedEDList<T> implements EDList<T> {
 	public String toStringFromUntilReverse(int from, int until) {
 		int tamaño;
 		LinkedEDList<T> inverso = new LinkedEDList<T>();
-		if(from <= 0 && until <= 0 && until > from) {
+		if(from <= 0 || until <= 0 || until > from) {
 			throw new IllegalArgumentException();
+		}
+		if(from > size() && until > size()) {
+			return inverso.toString();
 		}
 		if(from > size()) {
 			tamaño = size();
@@ -450,7 +484,11 @@ public class LinkedEDList<T> implements EDList<T> {
 				aux = aux.next;
 			}
 			inverso.addLast(aux.elem);
-			return toStringFromUntilReverseRec(inverso, tamaño-1, until).toString();
+			if(from == until) {
+				return inverso.toString();
+			}else {
+				return toStringFromUntilReverseRec(inverso, tamaño-1, until).toString();
+			}
 		}
 	}
 

@@ -51,8 +51,9 @@ public class LinkedEDListTest {
 	@Test
 	public void testAddPos() {
 		lista.addLast("2");
+		lista.addLast("B");
 		lista.addPos("A",2);
-		lista.addPos("B",3);
+		assertEquals("(2 A B )",lista.toString());
 		assertEquals(3,lista.size());
 		assertEquals("A",lista.getElemPos(2));
 		assertEquals("B",lista.getElemPos(3));
@@ -80,6 +81,42 @@ public class LinkedEDListTest {
 		assertEquals("(2 A )",lista.toString());
 		assertEquals("A",lista.removeFirstElem("A"));
 		assertEquals("(2 )",lista.toString());
+		assertEquals(1,lista.size());
+	}
+	
+	@Test
+	public void testGetPosLastTest() throws EmptyCollectionException {
+		lista.addLast("A");
+		lista.addLast("B");
+		lista.addLast("C");
+		lista.addLast("D");
+		lista.addLast("E");
+		assertEquals("(A B C D E )",lista.toString());
+		assertEquals(5,lista.getPosLast("E"));
+	}
+	
+	@Test
+	public void testGetPosLastDiffClass() throws EmptyCollectionException {
+		lista.addLast("A");
+		lista.addLast("B");
+		lista.addLast("C");
+		lista.addLast("D");
+		lista.addLast("E");
+		assertEquals("(A B C D E )",lista.toString());
+		assertEquals(1,lista.getPosLast("A"));
+	}
+	
+	@Test
+	public void testRemovePenulUntil1() throws EmptyCollectionException {
+		lista.addLast("2");
+		lista.addPos("A",2);
+		lista.addLast("B");
+		lista.addLast("C");
+		assertEquals("(2 A B C )",lista.toString());
+		assertEquals("B",lista.removePenult());
+		assertEquals("A",lista.removePenult());
+		assertEquals("2",lista.removePenult());
+		assertEquals("(C )",lista.toString());
 		assertEquals(1,lista.size());
 	}
 	
@@ -131,6 +168,8 @@ public class LinkedEDListTest {
 		lista.addLast("2");
 		lista.addLast("2");
 		assertEquals("(C 2 B A )",lista.toStringFromUntilReverse(5,2));
+		assertEquals("()",lista.toStringFromUntilReverse(9,8));
+		assertEquals("(2 )",lista.toStringFromUntilReverse(1,1));
 	}
 	
 	@Test
@@ -149,6 +188,24 @@ public class LinkedEDListTest {
 			lista.getPosFirst("C");
 	}
 	
+	@Test(expected=NoSuchElementException.class)
+	public void testRemoveLastElemNoExiste() throws EmptyCollectionException{
+		lista.addLast("A");	
+		lista.removeLastElem("C");
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testRemoveFirstElemNoExiste() throws EmptyCollectionException{
+		lista.addLast("A");	
+		lista.removeFirstElem("C");
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testGetLastElemNoExiste() throws EmptyCollectionException{
+		lista.addLast("A");	
+		lista.getPosLast("C");
+	}
+	 
 	@Test
 	public void test_AddLast() {
 		lista.addLast("2");
@@ -158,6 +215,18 @@ public class LinkedEDListTest {
 		Assert.assertEquals("(2 3 )", lista.toString());
 		lista.addLast("7");
 		Assert.assertEquals("(2 3 7 )", lista.toString());
+	}
+	
+	@Test
+	public void testAddPosVarios() {
+		lista.addLast("2");
+		lista.addLast("3");
+		lista.addLast("7");
+		lista.addLast("3");
+		lista.addLast("5");
+		lista.addLast("10");
+		lista.addPos("12", 4);
+		assertEquals("(2 3 7 12 3 5 10 )",lista.toString());
 	}
 	
 	@Test(expected=EmptyCollectionException.class)
@@ -183,8 +252,6 @@ public class LinkedEDListTest {
 		Assert.assertEquals("(7 10 3 2 )", lista.toString());
 		
 	}
-	
-	// TODO  AÑADIR RESTO DE METODOS DE TESTS
 	
 	
 }
