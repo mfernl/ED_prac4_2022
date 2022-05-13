@@ -121,7 +121,7 @@ public class LinkedEDListTest {
 	}
 	
 	@Test
-	public void testRemovelast() throws EmptyCollectionException {
+	public void testRemovelastElem() throws EmptyCollectionException {
 		lista.addLast("B");
 		lista.addPos("A",2);
 		lista.addLast("2");
@@ -252,6 +252,7 @@ public class LinkedEDListTest {
 		Assert.assertEquals("(7 10 3 2 )", lista.toString());
 		
 	}
+	
 	
 	
 }
