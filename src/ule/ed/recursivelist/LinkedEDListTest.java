@@ -233,10 +233,95 @@ public class LinkedEDListTest {
 	public void test_RemoveFirst_Vacia() throws EmptyCollectionException{
 		lista.removeFirstElem("A");
 	}
+	
+	@Test(expected=EmptyCollectionException.class)
+	public void testRemovePenultEmpty() throws EmptyCollectionException{
+		lista.removePenult();
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testRemovePenultNoSUch() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.removePenult();
+	}
+	
+	@Test(expected=EmptyCollectionException.class)
+	public void testRemoveLastEmpty() throws EmptyCollectionException{
+		lista.removelast();
+	}
+	
+	@Test(expected=EmptyCollectionException.class)
+	public void testRemoveLastElemEmpty() throws EmptyCollectionException{
+		lista.removeLastElem("2");
+	}
 
 	@Test(expected=NullPointerException.class)
 	public void test_addLast_ElementoNulo() {
 			lista.addLast(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testPosLast() {
+			lista.getPosLast(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testGetPosFirst2() {
+			lista.getPosFirst(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testRemoveLastElemNull() throws EmptyCollectionException{
+			lista.removeLastElem(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testAddPosNull() {
+			lista.addPos(null,3);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testAddAntePenulNull() {
+			lista.addAntePenult(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testRemoveFirstElemNull() throws EmptyCollectionException{
+			lista.removeFirstElem(null);
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testRemoveFirstElemNoSuch() throws EmptyCollectionException{
+			lista.addLast("2");
+			lista.removeFirstElem("3");
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testRemoveFirstElemNoSuch2() throws EmptyCollectionException{
+			lista.addLast("2");
+			lista.addLast("6");
+			lista.removeFirstElem("3");
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAddPosIlegall() {
+			lista.addPos("2",0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testGetELemPos() {
+			lista.getElemPos(0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testToStringFromUntil() {
+			lista.addLast("2");
+			lista.addLast("2");
+			lista.addLast("2");
+			lista.addLast("2");
+			lista.toStringFromUntilReverse(0,1);
+			lista.toStringFromUntilReverse(1,0);
+			lista.toStringFromUntilReverse(1,4);
 	}
 	
 	@Test
@@ -253,6 +338,84 @@ public class LinkedEDListTest {
 		
 	}
 	
+	@Test
+	public void testRemoveLast() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.addAntePenult("3");
+		lista.addAntePenult("7");
+		lista.addAntePenult("10");
+		Assert.assertEquals("(7 10 3 2 )", lista.toString());
+		lista.removelast();
+		lista.removelast();
+		assertEquals("(7 10 )", lista.toString());
+		
+	}
 	
+	@Test
+	public void testToStringFromUntilReverse() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		assertEquals("(2 2 2 2 )",lista.toStringFromUntilReverse(6,1));
+		
+	}
 	
+	@Test
+	public void testAddPosN() throws EmptyCollectionException{
+		lista.addPos("2",1);
+		lista.addPos("2",1);
+	}
+	
+	@Test
+	public void testAddAntePenult() throws EmptyCollectionException{
+		lista.addAntePenult("2");
+	}
+	
+	@Test
+	public void testRemovelast() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.removelast();
+	}
+	
+	@Test
+	public void testreverse() throws EmptyCollectionException{
+		lista.reverse();
+		lista.addLast("2");
+		lista.reverse();
+		lista.addLast("2");
+		lista.reverse();
+	}
+	
+	@Test
+	public void testRemoveFistElem() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.removeFirstElem("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("3");
+		lista.removeFirstElem("3");
+	}
+	
+	@Test
+	public void testRemoveFistElem2() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.addLast("3");
+		lista.removeFirstElem("3");
+	}
+	
+	@Test
+	public void testAddPosPOs() throws EmptyCollectionException{
+		lista.addPos("2",1);
+		lista.addPos("2",1);
+	}
+	
+	@Test
+	public void testAntePenul() throws EmptyCollectionException{
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addLast("2");
+		lista.addAntePenult("3");
+	}
 }

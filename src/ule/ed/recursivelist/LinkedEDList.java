@@ -145,8 +145,6 @@ public class LinkedEDList<T> implements EDList<T> {
 			throw new IllegalArgumentException();
 		}else if(position>size()) {
 			addLast(elem);
-		}else if(isEmpty()) {
-			addLast(elem);
 		}else if(position == 1) {
 			Node<T> nuevo = new Node<T>(elem);
 			Node<T> aux = front;
